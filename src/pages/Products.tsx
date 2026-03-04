@@ -1,46 +1,52 @@
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { products, categories } from "@/data/products";
 import ProductCard from "@/components/ProductCard";
 import ScrollReveal from "@/components/ScrollReveal";
 
-// Import all product images
-import product1 from "@/assets/product-1.jpg";
-import product2 from "@/assets/product-2.jpg";
-import product3 from "@/assets/product-3.jpg";
-import product4 from "@/assets/product-4.jpg";
-import product5 from "@/assets/product-5.jpg";
-import product6 from "@/assets/product-6.jpg";
-import product7 from "@/assets/product-7.jpg";
-import product8 from "@/assets/product-8.jpg";
-import product9 from "@/assets/product-9.jpg";
-import product10 from "@/assets/product-10.jpg";
-import product11 from "@/assets/product-11.jpg";
-import product12 from "@/assets/product-12.jpg";
+interface Product {
+  _id: string;
+  name: string;
+  price: number;
+  description: string;
+  category: string;
+  imageUrl: string;
+}
 
-const productImages: Record<string, string> = {
-  "1": product1,
-  "2": product2,
-  "3": product3,
-  "4": product4,
-  "5": product5,
-  "6": product6,
-  "7": product7,
-  "8": product8,
-  "9": product9,
-  "10": product10,
-  "11": product11,
-  "12": product12,
-};
+interface Category {
+  _id: string;
+  name: string;
+}
 
 /**
- * Products catalog page with category filtering.
- * Showcases all crochet creations in a beautiful grid.
+ * Products catalog page with category filtering fetched from API.
+ * Showcases all crochet creations dynamically.
  */
 const Products = () => {
   const [activeCategory, setActiveCategory] = useState("All");
+
+  const { data: categories = [], isLoading: catsLoading } = useQuery({
+    queryKey: ['publicCategories'],
+    queryFn: async () => {
+      const res = await fetch('http://localhost:5000/api/categories');
+      if (!res.ok) throw new Error('Failed to fetch categories');
+      return res.json() as Promise<Category[]>;
+    }
+  });
+
+  const { data, isLoading: prodsLoading } = useQuery({
+    queryKey: ['publicProducts'],
+    queryFn: async () => {
+      const res = await fetch('http://localhost:5000/api/products?limit=100');
+      if (!res.ok) throw new Error('Failed to fetch products');
+      return res.json();
+    }
+  });
+
+  const products: Product[] = data?.products || [];
+  const catNames = ["All", ...categories.map((c: Category) => c.name)];
 
   const filteredProducts =
     activeCategory === "All"
@@ -48,26 +54,26 @@ const Products = () => {
       : products.filter((p) => p.category === activeCategory);
 
   return (
-    <main className="min-h-screen pt-24">
+    <main className="min-h-screen pt-24 bg-[#FAFAFA]">
       {/* Header */}
-      <section className="px-6 pb-8 pt-12 lg:px-12">
+      <section className="px-6 pb-8 pt-12 lg:px-12 bg-white rounded-b-[3rem] shadow-sm mb-8">
         <div className="mx-auto max-w-7xl">
           <ScrollReveal>
             <Link
               to="/"
-              className="mb-8 inline-flex items-center gap-2 rounded-full bg-muted px-4 py-2 font-body text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+              className="mb-8 inline-flex items-center gap-2 rounded-full bg-gray-100 px-5 py-2.5 font-body text-sm font-medium text-gray-700 transition-colors hover:bg-primary/10 hover:text-primary"
             >
               <ArrowLeft size={16} />
               Back to Home
             </Link>
 
-            <p className="mb-3 font-body text-sm font-medium uppercase tracking-[0.3em] text-primary">
+            <p className="mb-3 font-body text-sm font-semibold uppercase tracking-[0.3em] text-primary">
               Our Collection
             </p>
-            <h1 className="mb-4 font-display text-5xl font-bold text-foreground md:text-6xl">
-              All <span className="italic text-primary">Creations</span>
+            <h1 className="mb-4 font-display text-5xl font-extrabold text-gray-900 md:text-6xl tracking-tight">
+              All <span className="italic font-light text-primary">Creations</span>
             </h1>
-            <p className="max-w-xl font-body text-lg text-muted-foreground">
+            <p className="max-w-xl font-body text-lg text-gray-600 leading-relaxed">
               Browse our complete collection of handmade crochet pieces. Every
               item is made with love, patience, and premium yarn.
             </p>
@@ -76,17 +82,16 @@ const Products = () => {
       </section>
 
       {/* Category Filter */}
-      <section className="sticky top-[72px] z-30 border-b border-border bg-background/80 backdrop-blur-lg">
-        <div className="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-6 py-4 lg:px-12">
-          {categories.map((category) => (
+      <section className="sticky top-[72px] z-30 bg-[#FAFAFA]/90 backdrop-blur-xl border-y border-gray-100 shadow-sm">
+        <div className="mx-auto flex max-w-7xl gap-3 overflow-x-auto px-6 py-4 lg:px-12 scrollbar-hide">
+          {catNames.map((category) => (
             <button
               key={category}
               onClick={() => setActiveCategory(category)}
-              className={`shrink-0 rounded-full px-5 py-2 font-body text-sm font-medium transition-all duration-300 ${
-                activeCategory === category
-                  ? "bg-primary text-primary-foreground shadow-glow"
-                  : "bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-              }`}
+              className={`shrink-0 rounded-full px-6 py-2.5 font-body text-sm font-semibold transition-all duration-300 ${activeCategory === category
+                  ? "bg-primary text-white shadow-md shadow-primary/20 scale-105"
+                  : "bg-white text-gray-600 border border-gray-200 hover:border-primary/50 hover:text-primary"
+                }`}
             >
               {category}
             </button>
@@ -95,50 +100,60 @@ const Products = () => {
       </section>
 
       {/* Products Grid */}
-      <section className="section-padding">
+      <section className="py-16 px-6 lg:px-12">
         <div className="mx-auto max-w-7xl">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeCategory}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-              className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-            >
-              {filteredProducts.map((product, i) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  image={productImages[product.id]}
-                  index={i}
-                />
-              ))}
-            </motion.div>
-          </AnimatePresence>
-
-          {filteredProducts.length === 0 && (
-            <div className="py-20 text-center">
-              <p className="font-display text-2xl text-muted-foreground">
-                No creations found in this category yet.
-              </p>
+          {prodsLoading ? (
+            <div className="flex flex-col items-center justify-center py-20">
+              <Loader2 className="w-10 h-10 animate-spin text-primary mb-4" />
+              <p className="text-gray-500 font-medium">Loading beautiful creations...</p>
             </div>
+          ) : (
+            <>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeCategory}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.3 }}
+                  className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                >
+                  {filteredProducts.map((product, i) => (
+                    <ProductCard
+                      key={product._id}
+                      product={product}
+                      image={product.imageUrl}
+                      index={i}
+                    />
+                  ))}
+                </motion.div>
+              </AnimatePresence>
+
+              {filteredProducts.length === 0 && (
+                <div className="py-24 text-center bg-white rounded-3xl border border-gray-100 shadow-sm mt-8">
+                  <p className="font-display text-2xl text-gray-500">
+                    No creations found in {activeCategory} yet.
+                  </p>
+                </div>
+              )}
+            </>
           )}
 
           {/* Order CTA */}
           <ScrollReveal>
-            <div className="mt-20 rounded-2xl bg-card p-10 text-center shadow-soft md:p-16">
-              <h3 className="mb-4 font-display text-3xl font-bold text-foreground md:text-4xl">
+            <div className="mt-24 rounded-[2.5rem] bg-gray-900 overflow-hidden relative p-10 text-center shadow-2xl md:p-20">
+              <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-transparent pointer-events-none" />
+              <h3 className="mb-6 font-display text-4xl font-extrabold text-white md:text-5xl tracking-tight relative z-10">
                 Love what you see?
               </h3>
-              <p className="mx-auto mb-8 max-w-md font-body text-lg text-muted-foreground">
+              <p className="mx-auto mb-10 max-w-xl font-body text-xl text-gray-300 leading-relaxed relative z-10">
                 To place an order, simply reach out via WhatsApp, Instagram, or email. Every piece starts with a conversation.
               </p>
               <a
                 href="https://wa.me/919876543210"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex rounded-full bg-primary px-10 py-4 font-body text-sm font-semibold uppercase tracking-wider text-primary-foreground shadow-glow transition-all duration-300 hover:scale-105 hover:shadow-card-hover"
+                className="relative z-10 inline-flex items-center rounded-full bg-primary px-12 py-5 font-body text-sm font-bold uppercase tracking-widest text-white shadow-xl shadow-primary/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/40"
               >
                 Order via WhatsApp
               </a>

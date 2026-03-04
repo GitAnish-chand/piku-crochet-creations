@@ -11,6 +11,12 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { useSmoothScroll } from "./hooks/useSmoothScroll";
 import { useGsapAnimations } from "./hooks/useGsapAnimations";
+import { AdminAuthProvider } from "./contexts/AdminAuthContext";
+import AdminLayout from "./components/admin/AdminLayout";
+import AdminLogin from "./pages/admin/Login";
+import AdminDashboard from "./pages/admin/Dashboard";
+import AdminProducts from "./pages/admin/Products";
+import AdminCategories from "./pages/admin/Categories";
 
 const queryClient = new QueryClient();
 
@@ -25,17 +31,25 @@ const ScrollToTop = () => {
 const AppShell = () => {
   useSmoothScroll();
   useGsapAnimations();
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
 
   return (
     <>
-      <Navbar />
+      {!isAdminRoute && <Navbar />}
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/products" element={<Products />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route element={<AdminLayout />}>
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/products" element={<AdminProducts />} />
+          <Route path="/admin/categories" element={<AdminCategories />} />
+        </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
-      <Footer />
+      {!isAdminRoute && <Footer />}
     </>
   );
 };
@@ -46,7 +60,9 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <AppShell />
+        <AdminAuthProvider>
+          <AppShell />
+        </AdminAuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

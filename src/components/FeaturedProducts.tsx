@@ -1,32 +1,33 @@
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
-import { products } from "@/data/products";
+import { ArrowRight, Loader2 } from "lucide-react";
 import ProductCard from "./ProductCard";
 import ScrollReveal from "./ScrollReveal";
 
-// Product image imports
-import product1 from "@/assets/product-1.jpg";
-import product2 from "@/assets/product-2.jpg";
-import product3 from "@/assets/product-3.jpg";
-import product4 from "@/assets/product-4.jpg";
-import product5 from "@/assets/product-5.jpg";
-import product6 from "@/assets/product-6.jpg";
-
-const productImages: Record<string, string> = {
-  "1": product1,
-  "2": product2,
-  "3": product3,
-  "4": product4,
-  "5": product5,
-  "6": product6,
-};
+interface Product {
+  _id: string;
+  name: string;
+  price: number;
+  description: string;
+  category: string;
+  imageUrl: string;
+}
 
 /**
  * Featured products grid on the homepage.
- * Shows 6 featured items with a CTA to the full catalog.
+ * Shows exactly the images from the backend products.
  */
 const FeaturedProducts = () => {
-  const featuredItems = products.filter((p) => p.featured).slice(0, 6);
+  const { data, isLoading } = useQuery({
+    queryKey: ['featuredProducts'],
+    queryFn: async () => {
+      const res = await fetch('http://localhost:5000/api/products?limit=6');
+      if (!res.ok) throw new Error('Failed to fetch products');
+      return res.json();
+    }
+  });
+
+  const featuredItems: Product[] = data?.products || [];
 
   return (
     <section className="section-padding relative overflow-hidden bg-card">
@@ -49,16 +50,26 @@ const FeaturedProducts = () => {
         </ScrollReveal>
 
         {/* Products Grid */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {featuredItems.map((product, i) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              image={productImages[product.id]}
-              index={i}
-            />
-          ))}
-        </div>
+        {isLoading ? (
+          <div className="flex justify-center py-12">
+            <Loader2 className="w-8 h-8 animate-spin text-primary" />
+          </div>
+        ) : featuredItems.length === 0 ? (
+          <div className="text-center py-12 text-muted-foreground">
+            No products available at the moment.
+          </div>
+        ) : (
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {featuredItems.map((product, i) => (
+              <ProductCard
+                key={product._id}
+                product={product}
+                image={product.imageUrl}
+                index={i}
+              />
+            ))}
+          </div>
+        )}
 
         {/* CTA */}
         <ScrollReveal>

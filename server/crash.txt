@@ -1,0 +1,23 @@
+﻿[dotenv@17.3.1] injecting env (6) from .env -- tip: ΓÜÖ∩╕Å  write to custom object with { processEnv: myObject }
+Server running on port 5000
+MongoDB connection error: MongoServerError: bad auth : authentication failed
+    at Connection.sendCommand (E:\Award_winning_projects\project\piku-crochet-creations\server\node_modules\mongodb\lib\cmap\connection.js:320:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Connection.command (E:\Award_winning_projects\project\piku-crochet-creations\server\node_modules\mongodb\lib\cmap\connection.js:344:26)
+    at async continueScramConversation (E:\Award_winning_projects\project\piku-crochet-creations\server\node_modules\mongodb\lib\cmap\auth\scram.js:131:15)
+    at async executeScram (E:\Award_winning_projects\project\piku-crochet-creations\server\node_modules\mongodb\lib\cmap\auth\scram.js:80:5)
+    at async ScramSHA1.auth (E:\Award_winning_projects\project\piku-crochet-creations\server\node_modules\mongodb\lib\cmap\auth\scram.js:39:16)
+    at async performInitialHandshake (E:\Award_winning_projects\project\piku-crochet-creations\server\node_modules\mongodb\lib\cmap\connect.js:104:13)
+    at async connect (E:\Award_winning_projects\project\piku-crochet-creations\server\node_modules\mongodb\lib\cmap\connect.js:24:9) {
+  errorLabelSet: Set(2) { 'HandshakeError', 'ResetPool' },
+  errorResponse: {
+    ok: 0,
+    errmsg: 'bad auth : authentication failed',
+    code: 8000,
+    codeName: 'AtlasError'
+  },
+  ok: 0,
+  code: 8000,
+  codeName: 'AtlasError',
+  connectionGeneration: 0
+}
