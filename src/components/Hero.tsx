@@ -44,7 +44,7 @@ const Hero = () => {
       <div ref={bgRef} className="absolute inset-0 will-change-transform">
         <video
           autoPlay
-          muted
+          
           loop
           playsInline
           className="h-full w-full object-contain sm:object-cover"
@@ -68,7 +68,7 @@ const Hero = () => {
             transition={{ delay: 0.3, duration: 0.8 }}
             className="mb-3 font-body text-xs font-medium uppercase tracking-[0.3em] text-primary sm:mb-4 sm:text-sm"
           >
-            Handcrafted with love
+            {/* Handcrafted with love */}
           </motion.p>
 
           <motion.h1
@@ -79,7 +79,7 @@ const Hero = () => {
           >
             Stitched with
             <br />
-            <span className="italic text-primary">soul</span>
+            <span className="italic text-primary"> soul</span>
           </motion.h1>
 
           <motion.p
