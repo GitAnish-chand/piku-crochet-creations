@@ -16,10 +16,22 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
-// Database Connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/crochet')
-    .then(() => console.log('MongoDB connected'))
-    .catch((err) => console.log('MongoDB connection error:', err));
+// Database Connection (Serverless optimize)
+let isConnected = false;
+
+const connectDB = async () => {
+    if (isConnected) return;
+    try {
+        const db = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/crochet');
+        isConnected = db.connections[0].readyState === 1;
+        console.log('MongoDB connected');
+    } catch (err) {
+        console.error('MongoDB connection error:', err);
+    }
+};
+
+// Connect immediately (it'll cache across warm serverless functions)
+connectDB();
 
 // Routes
 app.use('/api/admin', require('./routes/auth'));
