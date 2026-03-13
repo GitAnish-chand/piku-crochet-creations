@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Loader2 } from "lucide-react";
 import ProductCard from "./ProductCard";
 import ScrollReveal from "./ScrollReveal";
+import { API_URL } from '@/config/api';
 
 interface Product {
   _id: string;
@@ -21,7 +22,7 @@ const FeaturedProducts = () => {
   const { data, isLoading } = useQuery({
     queryKey: ['featuredProducts'],
     queryFn: async () => {
-      const res = await fetch('http://localhost:5000/api/products?limit=6');
+      const res = await fetch(`${API_URL}/products?limit=6`);
       if (!res.ok) throw new Error('Failed to fetch products');
       return res.json();
     }

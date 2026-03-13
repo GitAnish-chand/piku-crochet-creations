@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { ArrowLeft, Loader2, Check, SlidersHorizontal, ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
 import ProductCard from "@/components/ProductCard";
 import ScrollReveal from "@/components/ScrollReveal";
+import { Skeleton } from '@/components/ui/skeleton';
+import { API_URL } from '@/config/api';
 
 interface Product {
   _id: string;
@@ -30,7 +32,7 @@ const Products = () => {
   const { data: categories = [], isLoading: catsLoading } = useQuery({
     queryKey: ['publicCategories'],
     queryFn: async () => {
-      const res = await fetch('http://localhost:5000/api/categories');
+      const res = await fetch(`${API_URL}/categories`);
       if (!res.ok) throw new Error('Failed to fetch categories');
       return res.json() as Promise<Category[]>;
     }
@@ -39,7 +41,7 @@ const Products = () => {
   const { data, isLoading: prodsLoading } = useQuery({
     queryKey: ['publicProducts'],
     queryFn: async () => {
-      const res = await fetch('http://localhost:5000/api/products?limit=100');
+      const res = await fetch(`${API_URL}/products?limit=100`);
       if (!res.ok) throw new Error('Failed to fetch products');
       return res.json();
     }
