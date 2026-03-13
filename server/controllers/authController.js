@@ -121,7 +121,11 @@ exports.forgotPassword = async (req, res) => {
         admin.resetPasswordExpires = Date.now() + 3600000;
         await admin.save();
 
-        const resetUrl = `${process.env.CLIENT_URL}/admin/reset-password/${token}`;
+        const protocol = req.headers['x-forwarded-proto'] || req.protocol;
+        const host = req.headers.host;
+        const clientUrl = process.env.CLIENT_URL || `${protocol}://${host}`;
+        const resetUrl = `${clientUrl}/admin/reset-password/${token}`;
+        
         await sendResetEmail(admin.email, resetUrl);
 
         res.status(200).json({ message: 'Reset link sent to your email!' });
