@@ -3,30 +3,15 @@ import ScrollReveal from "./ScrollReveal";
 import { motion } from "framer-motion";
 
 const contactMethods = [
-  {
-    icon: MessageCircle,
-    label: "WhatsApp",
-    value: "+91 98765 43210",
-    href: "https://wa.me/919876543210",
-    description: "Quick chat for orders",
-    colorClass: "bg-sage-light text-secondary-foreground",
-  },
-  {
-    icon: Phone,
-    label: "Phone",
-    value: "+91 98765 43210",
-    href: "tel:+919876543210",
-    description: "Call us anytime",
-    colorClass: "bg-yarn-brown-light text-accent-foreground",
-  },
-  {
-    icon: Mail,
-    label: "Email",
-    value: "hello@pikucrochet.com",
-    href: "mailto:hello@pikucrochet.com",
-    description: "For detailed requests",
-    colorClass: "bg-rose-light text-primary",
-  },
+  
+  // {
+  //   icon: Phone,
+  //   label: "Phone",
+  //   value: "+91 98765 43210",
+  //   href: "tel:+919876543210",
+  //   description: "Call us anytime",
+  //   colorClass: "bg-yarn-brown-light text-accent-foreground",
+  // },
   {
     icon: Instagram,
     label: "Instagram",
@@ -35,12 +20,27 @@ const contactMethods = [
     description: "DM us for orders",
     colorClass: "bg-sage-light text-secondary-foreground",
   },
+  {
+    icon: MessageCircle,
+    label: "WhatsApp",
+    value: "+91 87993 96601",
+    href: "https://wa.me/918799396601",
+    description: "Quick chat for orders",
+    colorClass: "bg-sage-light text-secondary-foreground",
+  },
+  {
+    icon: Mail,
+    label: "Email",
+    value: "mehtapalak.crocheter@gmail.com",
+    href: "https://mail.google.com/mail/?view=cm&fs=1&to=mehtapalak.crocheter@gmail.com",
+    description: "For detailed requests",
+    colorClass: "bg-rose-light text-primary",
+  },
+  
+  
 ];
 
-/**
- * Contact section with animated card-style layout.
- * All contact info is dummy/placeholder data.
- */
+
 const Contact = () => {
   return (
     <section id="contact" className="section-padding relative overflow-hidden bg-card">
@@ -64,40 +64,39 @@ const Contact = () => {
           </p>
         </ScrollReveal>
 
-        <div className="grid gap-6 sm:grid-cols-2">
+        <div className="grid gap-6 sm:grid-cols-3">
           {contactMethods.map((method, index) => (
             <ScrollReveal key={method.label} delay={index * 0.1}>
-              <motion.a
-                href={method.href}
-                target="_blank"
-                rel="noopener noreferrer"
+              <motion.div
                 whileHover={{ y: -4, scale: 1.02 }}
                 transition={{ duration: 0.3 }}
-                className="group flex items-start gap-5 rounded-2xl bg-background p-6 shadow-soft transition-shadow duration-300 hover:shadow-card-hover"
               >
-                <div className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${method.colorClass} transition-transform duration-300 group-hover:scale-110`}>
-                  <method.icon size={24} />
-                </div>
-                <div>
-                  <p className="font-body text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                    {method.description}
-                  </p>
-                  <h3 className="mt-1 font-display text-xl font-semibold text-foreground">
-                    {method.label}
-                  </h3>
-                  <p className="mt-1 font-body text-sm text-primary">
-                    {method.value}
-                  </p>
-                </div>
-              </motion.a>
+                <a
+                  href={method.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-start gap-5 rounded-2xl bg-background p-6 shadow-soft transition-shadow duration-300 hover:shadow-card-hover w-full h-full"
+                >
+                  <div className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${method.colorClass} transition-transform duration-300 group-hover:scale-110`}>
+                    <method.icon size={24} />
+                  </div>
+                  <div>
+                    <p className="font-body text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                      {method.description}
+                    </p>
+                    <h3 className="mt-1 font-display text-xl font-semibold text-foreground">
+                      {method.label}
+                    </h3>
+                    <p className="mt-1 font-body text-sm text-primary">
+                      {method.value}
+                    </p>
+                  </div>
+                </a>
+              </motion.div>
             </ScrollReveal>
           ))}
         </div>
 
-        {/* Note about dummy data */}
-        <p className="mt-8 text-center font-body text-xs text-muted-foreground/60">
-          * Contact information shown is placeholder data for demonstration purposes
-        </p>
       </div>
     </section>
   );

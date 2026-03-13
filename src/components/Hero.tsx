@@ -4,9 +4,25 @@ import { Link } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import heroVideo from "@/assets/hero-video.mp4";
+
+import product1 from "@/assets/product-1.jpg";
+import product2 from "@/assets/product-2.jpg";
+import product3 from "@/assets/product-3.jpg";
+import product4 from "@/assets/product-4.jpg";
+import product5 from "@/assets/product-5.jpg";
+import product6 from "@/assets/product-6.jpg";
+import product7 from "@/assets/product-7.jpg";
+import product8 from "@/assets/product-8.jpg";
+import product9 from "@/assets/product-9.jpg";
+import product10 from "@/assets/product-10.jpg";
+import product11 from "@/assets/product-11.jpg";
+import product12 from "@/assets/product-12.jpg";
 
 gsap.registerPlugin(ScrollTrigger);
+
+const row1 = [product1, product2, product3, product4, product1, product2, product3, product4];
+const row2 = [product5, product6, product7, product8, product5, product6, product7, product8];
+const row3 = [product9, product10, product11, product12, product9, product10, product11, product12];
 
 const Hero = () => {
   const sectionRef = useRef<HTMLElement>(null);
@@ -39,74 +55,67 @@ const Hero = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative flex min-h-[100svh] items-center justify-center overflow-hidden">
-      {/* Video background */}
-      <div ref={bgRef} className="absolute inset-0 will-change-transform">
-        <video
-          autoPlay
-          
-          loop
-          playsInline
-          className="h-full w-full object-contain sm:object-cover"
-          style={{ backgroundColor: "hsl(var(--background))" }}
-          src={heroVideo}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/15 via-background/20 to-background/35" />
+    <section ref={sectionRef} className="relative flex min-h-[100svh] items-center justify-center overflow-hidden bg-[#FDF8F2]">
+      {/* Background Collage */}
+      <div ref={bgRef} className="absolute inset-0 z-0 overflow-hidden will-change-transform">
+        <div className="absolute top-1/2 left-1/2 flex w-[150vw] -translate-x-1/2 -translate-y-1/2 -rotate-12 flex-col gap-4 sm:gap-6">
+          {/* Row 1 */}
+          <div className="flex w-max animate-slide-left gap-4 sm:gap-6">
+            {row1.map((src, idx) => (
+              <div key={`r1-${idx}`} className="h-48 w-48 sm:h-64 sm:w-64 md:h-80 md:w-80 shrink-0 overflow-hidden rounded-xl shadow-md border-[6px] border-white pointer-events-none">
+                <img src={src} className="h-full w-full object-cover" alt="" />
+              </div>
+            ))}
+          </div>
+          {/* Row 2 */}
+          <div className="flex w-max animate-slide-left gap-4 sm:gap-6" style={{ animationDirection: "reverse" }}>
+            {row2.map((src, idx) => (
+              <div key={`r2-${idx}`} className="h-48 w-48 sm:h-64 sm:w-64 md:h-80 md:w-80 shrink-0 overflow-hidden rounded-xl shadow-md border-[6px] border-white pointer-events-none">
+                <img src={src} className="h-full w-full object-cover" alt="" />
+              </div>
+            ))}
+          </div>
+          {/* Row 3 */}
+          <div className="flex w-max animate-slide-left gap-4 sm:gap-6">
+            {row3.map((src, idx) => (
+              <div key={`r3-${idx}`} className="h-48 w-48 sm:h-64 sm:w-64 md:h-80 md:w-80 shrink-0 overflow-hidden rounded-xl shadow-md border-[6px] border-white pointer-events-none">
+                <img src={src} className="h-full w-full object-cover" alt="" />
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="absolute inset-0 bg-white/10 bg-[radial-gradient(circle_at_center,rgba(253,248,242,0.85)_0%,rgba(253,248,242,0.45)_40%,transparent_100%)] sm:bg-[radial-gradient(ellipse_at_center,rgba(253,248,242,0.85)_0%,rgba(253,248,242,0.45)_30%,rgba(253,248,242,0.15)_60%,transparent_100%)] pointer-events-none" />
       </div>
 
-      {/* Floating decorative elements */}
-      <div className="float-on-scroll absolute left-[10%] top-[20%] h-16 w-16 rounded-full bg-primary/10 blur-xl" />
-      <div className="float-on-scroll absolute right-[15%] top-[60%] h-24 w-24 rounded-full bg-accent/10 blur-xl" />
-      <div className="float-on-scroll absolute left-[60%] top-[15%] h-12 w-12 rounded-full bg-rose/15 blur-lg" />
-
       {/* Content */}
-      <div className="relative z-10 mx-auto flex max-w-7xl flex-col items-center gap-6 px-4 sm:px-6 lg:flex-row lg:gap-16 lg:px-12">
-        <div className="flex-1 text-center lg:text-left">
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.8 }}
-            className="mb-3 font-body text-xs font-medium uppercase tracking-[0.3em] text-primary sm:mb-4 sm:text-sm"
-          >
-            {/* Handcrafted with love */}
-          </motion.p>
-
+      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col items-center gap-6 px-4 sm:px-6 lg:px-12 mt-12">
+        <div className="flex flex-col items-center text-center">
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.8 }}
-            className="mb-4 font-display text-4xl font-bold leading-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl"
+            transition={{ delay: 0.3, duration: 0.8 }}
+            className="mb-8 font-display text-5xl font-bold leading-tight text-[#3A2D32] sm:text-6xl md:text-7xl lg:text-[5.5rem] tracking-tight"
           >
             Stitched with
             <br />
-            <span className="italic text-primary"> soul</span>
+            <span className="italic text-[#E87EA1]">soul</span>
           </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7, duration: 0.8 }}
-            className="mb-8 max-w-lg font-body text-base leading-relaxed text-muted-foreground sm:mb-10 sm:text-lg lg:text-xl"
-          >
-            Every stitch tells a story. Discover handmade crochet creations
-            crafted with premium yarn and endless patience.
-          </motion.p>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.9, duration: 0.8 }}
-            className="flex flex-wrap justify-center gap-3 sm:gap-4 lg:justify-start"
+            transition={{ delay: 0.7, duration: 0.8 }}
+            className="flex flex-wrap justify-center gap-4 sm:gap-6"
           >
             <Link
               to="/products"
-              className="group rounded-full bg-primary px-6 py-3 font-body text-xs font-semibold uppercase tracking-wider text-primary-foreground shadow-glow transition-all duration-300 hover:shadow-card-hover hover:scale-105 hover:-translate-y-1 sm:px-8 sm:py-4 sm:text-sm"
+              className="group rounded-full bg-[#E87EA1] px-8 py-4 font-body text-sm font-bold uppercase tracking-widest text-white shadow-md transition-all duration-300 hover:bg-[#d66a8c] hover:shadow-lg hover:-translate-y-1"
             >
               Explore Creations
             </Link>
             <button
               onClick={scrollToAbout}
-              className="rounded-full border border-border bg-card/50 px-6 py-3 font-body text-xs font-semibold uppercase tracking-wider text-foreground backdrop-blur-sm transition-all duration-300 hover:bg-card hover:shadow-soft hover:-translate-y-1 sm:px-8 sm:py-4 sm:text-sm"
+              className="rounded-full bg-[#F3EFE9] px-8 py-4 font-body text-sm font-bold uppercase tracking-widest text-[#3A2D32] shadow-sm transition-all duration-300 hover:bg-[#EAE4DC] hover:shadow-md hover:-translate-y-1"
             >
               Our Story
             </button>
@@ -119,8 +128,8 @@ const Hero = () => {
         onClick={scrollToAbout}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.5, duration: 0.8 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-float text-muted-foreground transition-colors hover:text-primary"
+        transition={{ delay: 1.2, duration: 0.8 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-float text-[#5C4D53] transition-colors hover:text-[#E87EA1]"
         aria-label="Scroll down"
       >
         <ChevronDown size={32} />

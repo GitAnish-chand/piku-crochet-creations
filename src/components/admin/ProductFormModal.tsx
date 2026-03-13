@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { API_URL } from '@/config/api';
 import { Loader2, X, Upload } from 'lucide-react';
 import { toast } from 'sonner';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -68,11 +70,13 @@ const ProductFormModal = ({ isOpen, onClose, categories, productToEdit }: Props)
 
     const saveMutation = useMutation({
         mutationFn: async (formData: FormData) => {
-            const url = productToEdit
-                ? `http://localhost:5000/api/products/${productToEdit._id}`
-                : 'http://localhost:5000/api/products';
+            const isEditing = !!productToEdit;
+            // 2. Submit Product Data
+            const url = isEditing && productToEdit
+                ? `${API_URL}/products/${productToEdit._id}`
+                : `${API_URL}/products`;
 
-            const method = productToEdit ? 'PUT' : 'POST';
+            const method = isEditing ? 'PUT' : 'POST';
 
             const res = await fetch(url, {
                 method,

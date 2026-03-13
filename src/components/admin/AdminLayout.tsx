@@ -1,7 +1,7 @@
 import React from 'react';
 import { Outlet, Navigate, Link, useLocation } from 'react-router-dom';
 import { useAdminAuth } from '../../contexts/AdminAuthContext';
-import { LayoutDashboard, Package, Tags, LogOut, Loader2 } from 'lucide-react';
+import { LayoutDashboard, Package, Tags, LogOut, Loader2, Settings as SettingsIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 
@@ -25,6 +25,7 @@ export const AdminLayout = () => {
         { name: 'Dashboard', path: '/admin/dashboard', icon: LayoutDashboard },
         { name: 'Products', path: '/admin/products', icon: Package },
         { name: 'Categories', path: '/admin/categories', icon: Tags },
+        { name: 'Settings', path: '/admin/settings', icon: SettingsIcon },
     ];
 
     return (

@@ -4,7 +4,8 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Trash2, Plus, Loader2 } from 'lucide-react';
+import { Loader2, Plus, Pencil, Trash2, Check, X } from 'lucide-react';
+import { API_URL } from '@/config/api';
 
 interface Category {
     _id: string;
@@ -19,25 +20,35 @@ const Categories = () => {
     const { data: categories, isLoading } = useQuery({
         queryKey: ['adminCategories'],
         queryFn: async () => {
-            const res = await fetch('http://localhost:5000/api/categories');
-            if (!res.ok) throw new Error('Failed to fetch categories');
-            return res.json() as Promise<Category[]>;
+            try {
+                const res = await fetch(`${API_URL}/categories`);
+                if (!res.ok) throw new Error('Failed to fetch categories');
+                return res.json() as Promise<Category[]>;
+            } catch (error) {
+                console.error("Error fetching categories:", error);
+                throw error;
+            }
         }
     });
 
     const createMutation = useMutation({
         mutationFn: async (name: string) => {
-            const res = await fetch('http://localhost:5000/api/categories', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name }),
-                credentials: 'include'
-            });
-            if (!res.ok) {
-                const error = await res.json();
-                throw new Error(error.message || 'Failed to create category');
+            try {
+                const res = await fetch(`${API_URL}/categories`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name }),
+                    credentials: 'include'
+                });
+                if (!res.ok) {
+                    const error = await res.json();
+                    throw new Error(error.message || 'Failed to create category');
+                }
+                return res.json();
+            } catch (error) {
+                console.error("Error creating category:", error);
+                throw error;
             }
-            return res.json();
         },
         onSuccess: () => {
             toast.success('Category created');
@@ -51,15 +62,20 @@ const Categories = () => {
 
     const deleteMutation = useMutation({
         mutationFn: async (id: string) => {
-            const res = await fetch(`http://localhost:5000/api/categories/${id}`, {
-                method: 'DELETE',
-                credentials: 'include'
-            });
-            if (!res.ok) {
-                const error = await res.json();
-                throw new Error(error.message || 'Failed to delete category');
+            try {
+                const res = await fetch(`${API_URL}/categories/${id}`, {
+                    method: 'DELETE',
+                    credentials: 'include'
+                });
+                if (!res.ok) {
+                    const error = await res.json();
+                    throw new Error(error.message || 'Failed to delete category');
+                }
+                return res.json();
+            } catch (error) {
+                console.error("Error deleting category:", error);
+                throw error;
             }
-            return res.json();
         },
         onSuccess: () => {
             toast.success('Category deleted');

@@ -81,67 +81,74 @@ const Products = () => {
         </div>
       </section>
 
-      {/* Category Filter */}
-      <section className="sticky top-[72px] z-30 bg-[#FAFAFA]/90 backdrop-blur-xl border-y border-gray-100 shadow-sm">
-        <div className="mx-auto flex max-w-7xl gap-3 overflow-x-auto px-6 py-4 lg:px-12 scrollbar-hide">
-          {catNames.map((category) => (
-            <button
-              key={category}
-              onClick={() => setActiveCategory(category)}
-              className={`shrink-0 rounded-full px-6 py-2.5 font-body text-sm font-semibold transition-all duration-300 ${activeCategory === category
+      {/* Container to restrict sticky filter scope */}
+      <div className="relative">
+        {/* Category Filter */}
+        <section className="sticky top-[72px] z-30 bg-[#FAFAFA]/90 backdrop-blur-xl border-y border-gray-100 shadow-sm">
+          <div className="mx-auto flex max-w-7xl gap-3 overflow-x-auto px-6 py-4 lg:px-12 scrollbar-hide">
+            {catNames.map((category) => (
+              <button
+                key={category}
+                onClick={() => setActiveCategory(category)}
+                className={`shrink-0 rounded-full px-6 py-2.5 font-body text-sm font-semibold transition-all duration-300 ${activeCategory === category
                   ? "bg-primary text-white shadow-md shadow-primary/20 scale-105"
                   : "bg-white text-gray-600 border border-gray-200 hover:border-primary/50 hover:text-primary"
-                }`}
-            >
-              {category}
-            </button>
-          ))}
-        </div>
-      </section>
+                  }`}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+        </section>
 
-      {/* Products Grid */}
-      <section className="py-16 px-6 lg:px-12">
+        {/* Products Grid */}
+        <section className="py-16 px-6 lg:px-12">
+          <div className="mx-auto max-w-7xl">
+            {prodsLoading ? (
+              <div className="flex flex-col items-center justify-center py-20">
+                <Loader2 className="w-10 h-10 animate-spin text-primary mb-4" />
+                <p className="text-gray-500 font-medium">Loading beautiful creations...</p>
+              </div>
+            ) : (
+              <>
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeCategory}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3 }}
+                    className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                  >
+                    {filteredProducts.map((product, i) => (
+                      <ProductCard
+                        key={product._id}
+                        product={product}
+                        image={product.imageUrl}
+                        index={i}
+                      />
+                    ))}
+                  </motion.div>
+                </AnimatePresence>
+
+                {filteredProducts.length === 0 && (
+                  <div className="py-24 text-center bg-white rounded-3xl border border-gray-100 shadow-sm mt-8">
+                    <p className="font-display text-2xl text-gray-500">
+                      No creations found in {activeCategory} yet.
+                    </p>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        </section>
+      </div>
+
+      {/* Order CTA */}
+      <section className="pb-24 px-6 lg:px-12">
         <div className="mx-auto max-w-7xl">
-          {prodsLoading ? (
-            <div className="flex flex-col items-center justify-center py-20">
-              <Loader2 className="w-10 h-10 animate-spin text-primary mb-4" />
-              <p className="text-gray-500 font-medium">Loading beautiful creations...</p>
-            </div>
-          ) : (
-            <>
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeCategory}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.3 }}
-                  className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-                >
-                  {filteredProducts.map((product, i) => (
-                    <ProductCard
-                      key={product._id}
-                      product={product}
-                      image={product.imageUrl}
-                      index={i}
-                    />
-                  ))}
-                </motion.div>
-              </AnimatePresence>
-
-              {filteredProducts.length === 0 && (
-                <div className="py-24 text-center bg-white rounded-3xl border border-gray-100 shadow-sm mt-8">
-                  <p className="font-display text-2xl text-gray-500">
-                    No creations found in {activeCategory} yet.
-                  </p>
-                </div>
-              )}
-            </>
-          )}
-
-          {/* Order CTA */}
           <ScrollReveal>
-            <div className="mt-24 rounded-[2.5rem] bg-gray-900 overflow-hidden relative p-10 text-center shadow-2xl md:p-20">
+            <div className="rounded-[2.5rem] bg-gray-900 overflow-hidden relative p-10 text-center shadow-2xl md:p-20">
               <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-transparent pointer-events-none" />
               <h3 className="mb-6 font-display text-4xl font-extrabold text-white md:text-5xl tracking-tight relative z-10">
                 Love what you see?

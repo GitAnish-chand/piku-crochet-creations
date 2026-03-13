@@ -27,13 +27,9 @@ const Navbar = () => {
   }, [location]);
 
   const handleNavClick = (path: string) => {
-    if (path.startsWith("/#")) {
+    if (path.startsWith("/#") && location.pathname === "/") {
       const id = path.replace("/#", "");
-      if (location.pathname === "/") {
-        document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-      } else {
-        window.location.href = path;
-      }
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
     }
     setIsOpen(false);
   };
@@ -43,44 +39,46 @@ const Navbar = () => {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled
-          ? "bg-background/90 backdrop-blur-xl shadow-soft border-b border-border/50 py-3"
-          : "bg-transparent py-5"
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled
+        ? "bg-[#FDF8F2]/95 backdrop-blur-xl shadow-soft py-2"
+        : "bg-[#FDF8F2] py-3"
+        }`}
     >
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-12">
-        <Link to="/" className="group flex items-center gap-2">
-          <span className="font-display text-2xl font-bold tracking-tight text-foreground transition-colors group-hover:text-primary">
-            Piku
-          </span>
-          <span className="font-display text-lg font-light italic text-muted-foreground">
-            Crochet
-          </span>
-        </Link>
+      <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 lg:px-12 relative">
+        {/* Left: Image Logo */}
+        <div className="flex justify-start z-50">
+          <Link to="/" className="group relative block">
+            <div className="h-16 w-16 md:h-20 md:w-20 rounded-full border-[3px] border-[#FDF8F2] shadow-sm overflow-hidden bg-white transition-transform duration-300 group-hover:scale-105">
+              <img src="/piku-logo.png" alt="Piku Crochet Logo" className="h-full w-full object-cover" />
+            </div>
+          </Link>
+        </div>
 
-        {/* Desktop Nav — center-expanding underline on hover */}
-        <div className="hidden items-center gap-8 md:flex">
+        {/* Right: Desktop Nav */}
+        <div className="hidden items-center justify-end gap-5 lg:gap-8 md:flex">
           {navLinks.map((link) => (
             <Link
               key={link.name}
               to={link.path}
               onClick={() => handleNavClick(link.path)}
-              className="group relative font-body text-sm font-medium tracking-wide text-foreground/70 transition-colors hover:text-foreground"
+              className="group relative font-body text-sm lg:text-base font-medium tracking-wide text-stone-700 transition-colors hover:text-[#E87EA1]"
             >
               {link.name}
-              <span className="absolute -bottom-1 left-1/2 h-0.5 w-0 -translate-x-1/2 rounded-full bg-primary transition-all duration-300 group-hover:w-full" />
+              <span className="absolute -bottom-1 left-1/2 h-0.5 w-0 -translate-x-1/2 rounded-full bg-[#E87EA1] transition-all duration-300 group-hover:w-full" />
             </Link>
           ))}
         </div>
 
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="relative z-50 rounded-full p-2 text-foreground transition-colors hover:bg-muted md:hidden"
-          aria-label="Toggle menu"
-        >
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        {/* Mobile Toggle */}
+        <div className="flex justify-end md:hidden z-50">
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="relative z-50 rounded-full p-2 text-stone-600 transition-colors hover:bg-stone-100"
+            aria-label="Toggle menu"
+          >
+            {isOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
 
       <AnimatePresence>
@@ -90,9 +88,9 @@ const Navbar = () => {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="overflow-hidden border-t border-border bg-background/95 backdrop-blur-xl md:hidden"
+            className="overflow-hidden border-t border-border bg-[#FDF8F2]/95 backdrop-blur-xl md:hidden"
           >
-            <div className="flex flex-col gap-1 px-6 py-6">
+            <div className="flex flex-col gap-1 px-6 py-6 pt-16">
               {navLinks.map((link, i) => (
                 <motion.div
                   key={link.name}
@@ -103,7 +101,7 @@ const Navbar = () => {
                   <Link
                     to={link.path}
                     onClick={() => handleNavClick(link.path)}
-                    className="block rounded-lg px-4 py-3 font-body text-base font-medium text-foreground transition-colors hover:bg-muted"
+                    className="block rounded-lg px-4 py-3 font-body text-lg font-medium text-stone-700 transition-colors hover:bg-stone-100 hover:text-[#E87EA1]"
                   >
                     {link.name}
                   </Link>

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { API_URL } from '@/config/api';
 
 interface AdminContextType {
     isAuthenticated: boolean;
@@ -18,7 +19,7 @@ export const AdminAuthProvider = ({ children }: { children: React.ReactNode }) =
     useEffect(() => {
         const checkAuth = async () => {
             try {
-                const response = await fetch('http://localhost:5000/api/admin/check', {
+                const response = await fetch(`${API_URL}/admin/check`, {
                     // ensure credentials are included to send cookie
                     credentials: 'include'
                 });
@@ -43,7 +44,7 @@ export const AdminAuthProvider = ({ children }: { children: React.ReactNode }) =
 
     const logout = async () => {
         try {
-            await fetch('http://localhost:5000/api/admin/logout', { method: 'POST', credentials: 'include' });
+            await fetch(`${API_URL}/admin/logout`, { method: 'POST', credentials: 'include' });
             setIsAuthenticated(false);
             navigate('/admin/login');
         } catch (error) {

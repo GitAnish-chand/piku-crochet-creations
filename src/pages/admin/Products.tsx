@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Pencil, Trash2, Plus, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import ProductFormModal from '../../components/admin/ProductFormModal';
+import { API_URL } from '@/config/api';
 
 interface Product {
   _id: string;
@@ -22,7 +23,7 @@ const Products = () => {
   const { data: categories = [] } = useQuery({
     queryKey: ['adminCategories'],
     queryFn: async () => {
-      const res = await fetch('http://localhost:5000/api/categories');
+      const res = await fetch(`${API_URL}/categories`);
       if (!res.ok) throw new Error('Failed to fetch categories');
       return res.json();
     }
@@ -31,7 +32,7 @@ const Products = () => {
   const { data, isLoading } = useQuery({
     queryKey: ['adminProducts'],
     queryFn: async () => {
-      const res = await fetch('http://localhost:5000/api/products?limit=50'); // Just grab up to 50 for now
+      const res = await fetch(`${API_URL}/products?limit=50`); // Just grab up to 50 for now
       if (!res.ok) throw new Error('Failed to fetch products');
       return res.json();
     }
@@ -39,7 +40,7 @@ const Products = () => {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      const res = await fetch(`http://localhost:5000/api/products/${id}`, {
+      const res = await fetch(`${API_URL}/products/${id}`, {
         method: 'DELETE',
         credentials: 'include'
       });

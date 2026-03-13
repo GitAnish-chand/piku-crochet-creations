@@ -57,7 +57,9 @@ const Footer = () => {
                   <Instagram size={18} />
                 </a>
                 <a
-                  href="mailto:hello@pikucrochet.com"
+                  href="https://mail.google.com/mail/?view=cm&fs=1&to=mehtapalak.crocheter@gmail.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex h-10 w-10 items-center justify-center rounded-full bg-muted text-muted-foreground transition-all duration-300 hover:bg-primary hover:text-primary-foreground hover:scale-110"
                   aria-label="Email"
                 >
@@ -65,7 +67,7 @@ const Footer = () => {
                 </a>
               </div>
               <p className="mt-4 font-body text-sm text-muted-foreground">
-                hello@pikucrochet.com
+                anishchand9984@gmail.com
               </p>
             </div>
           </div>

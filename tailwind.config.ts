@@ -117,6 +117,10 @@ export default {
           "0%": { opacity: "0", transform: "scale(0.9)" },
           "100%": { opacity: "1", transform: "scale(1)" },
         },
+        "slide-left": {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -126,6 +130,7 @@ export default {
         "spin-slow": "spin-slow 20s linear infinite",
         "fade-up": "fade-up 0.8s ease-out",
         "scale-in": "scale-in 0.5s ease-out",
+        "slide-left": "slide-left 40s linear infinite",
       },
     },
   },

@@ -1,20 +1,27 @@
 import React, { useState } from 'react';
 import { useAdminAuth } from '../../contexts/AdminAuthContext';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
+import { API_URL } from '@/config/api';
 
 const AdminLogin = () => {
     const { isAuthenticated, login } = useAdminAuth();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    // Get redirect path from query params, default to dashboard
+    const searchParams = new URLSearchParams(location.search);
+    const redirectTo = searchParams.get('redirect') || '/admin/dashboard';
 
     if (isAuthenticated) {
-        return <Navigate to="/admin/dashboard" replace />;
+        return <Navigate to={redirectTo} replace />;
     }
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -22,7 +29,7 @@ const AdminLogin = () => {
         setIsLoading(true);
 
         try {
-            const response = await fetch('http://localhost:5000/api/admin/login', {
+            const response = await fetch(`${API_URL}/admin/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password }),
@@ -34,8 +41,9 @@ const AdminLogin = () => {
             if (response.ok) {
                 toast.success('Logged in successfully');
                 login(data.token); // Assume login is successful
+                navigate(redirectTo, { replace: true });
             } else {
-                toast.error(data.message || 'Login failed');
+                toast.error(data.message || 'Invalid email or password.');
             }
         } catch (error) {
             toast.error('Network error occurred during login');
@@ -84,6 +92,14 @@ const AdminLogin = () => {
                                     onChange={(e) => setPassword(e.target.value)}
                                     className="appearance-none block w-full px-3 py-2"
                                 />
+                            </div>
+                        </div>
+
+                        <div className="flex items-center justify-end">
+                            <div className="text-sm">
+                                <a href="/admin/forgot-password" className="font-medium text-[#c2185b] hover:text-[#9c1349]">
+                                    Forgot your password?
+                                </a>
                             </div>
                         </div>
 

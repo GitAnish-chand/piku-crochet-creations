@@ -10,7 +10,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-    origin: ['http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:8080', 'http://127.0.0.1:8080'], // Added Vite/Next 8080 port
+    origin: [process.env.CLIENT_URL, 'http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:8080', 'http://127.0.0.1:8080'], // Added Vite/Next 8080 port
     credentials: true,
 }));
 app.use(express.json());
@@ -25,6 +25,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/crochet')
 app.use('/api/admin', require('./routes/auth'));
 app.use('/api/products', require('./routes/products'));
 app.use('/api/categories', require('./routes/categories'));
+app.use('/api/stats', require('./routes/stats'));
 
 app.get('/', (req, res) => {
     res.send('API is running...');

@@ -73,7 +73,7 @@ const About = () => {
                   <p className="mt-1 font-body text-sm text-muted-foreground">Handmade</p>
                 </div>
                 <div>
-                  <p className="font-display text-3xl font-bold text-primary">200+</p>
+                  <p className="font-display text-3xl font-bold text-primary">50+</p>
                   <p className="mt-1 font-body text-sm text-muted-foreground">Creations</p>
                 </div>
                 <div>

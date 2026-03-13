@@ -13,18 +13,35 @@ import { useSmoothScroll } from "./hooks/useSmoothScroll";
 import { useGsapAnimations } from "./hooks/useGsapAnimations";
 import { AdminAuthProvider } from "./contexts/AdminAuthContext";
 import AdminLayout from "./components/admin/AdminLayout";
+import ProtectedRoute from "./components/admin/ProtectedRoute";
 import AdminLogin from "./pages/admin/Login";
+import ForgotPassword from "./pages/admin/ForgotPassword";
+import ResetPassword from "./pages/admin/ResetPassword";
 import AdminDashboard from "./pages/admin/Dashboard";
 import AdminProducts from "./pages/admin/Products";
 import AdminCategories from "./pages/admin/Categories";
+import AdminSettings from "./pages/admin/Settings";
 
 const queryClient = new QueryClient();
 
 const ScrollToTop = () => {
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
+
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
+    if (hash) {
+      // Small timeout to ensure DOM is ready and React finishes rendering
+      setTimeout(() => {
+        const id = hash.replace("#", "");
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 100);
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, [pathname, hash]);
+
   return null;
 };
 
@@ -42,10 +59,13 @@ const AppShell = () => {
         <Route path="/" element={<Index />} />
         <Route path="/products" element={<Products />} />
         <Route path="/admin/login" element={<AdminLogin />} />
-        <Route element={<AdminLayout />}>
+        <Route path="/admin/forgot-password" element={<ForgotPassword />} />
+        <Route path="/admin/reset-password/:token" element={<ResetPassword />} />
+        <Route element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/products" element={<AdminProducts />} />
           <Route path="/admin/categories" element={<AdminCategories />} />
+          <Route path="/admin/settings" element={<AdminSettings />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
